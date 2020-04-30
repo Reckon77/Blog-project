@@ -50,7 +50,7 @@ app.get("/", (req, res) => {
 
     })
     //New Route(form for adding a new blog)
-app.get("/blog", (req, res) => {
+app.get("/newblog", (req, res) => {
         res.render("new")
     })
     //Create Route
@@ -94,6 +94,15 @@ app.get("/blog/:id", function(req, res) {
 
     })
     //Delete Route
+app.get("/blog/:id/delete", (req, res) => {
+    Blog.findById(req.params.id, function(err, foundBlog) {
+        if (err) {
+            console.log(err)
+        } else {
+            res.render("delete", { blog: foundBlog })
+        }
+    })
+})
 app.delete("/blog/:id", function(req, res) {
     Blog.findByIdAndRemove(req.params.id, function(err) {
         if (err) {
@@ -106,5 +115,5 @@ app.delete("/blog/:id", function(req, res) {
 
 
 app.listen(3000, function() {
-    console.log("Server connected")
+    console.log("Server started on port 3000")
 })
