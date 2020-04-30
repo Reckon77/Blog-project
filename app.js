@@ -38,7 +38,14 @@ var Blog = mongoose.model("Blog", blogSchema)
 //Routes
 //Index Route(Homepage)
 app.get("/", (req, res) => {
-        res.render("home")
+        Blog.find({}, function(err, blogs) {
+            if (err) {
+                console.log(err)
+            } else {
+                res.render("home", { blogs: blogs })
+            }
+        })
+
     })
     //New Route(form for adding a new blog)
 app.get("/blog", (req, res) => {
@@ -46,29 +53,40 @@ app.get("/blog", (req, res) => {
     })
     //Create Route
 app.post("/blog", (req, res) => {
-    upload(req, res, (err) => {
+        upload(req, res, (err) => {
+            if (err) {
+                console.log(err)
+                res.render("new")
+            } else {
+                console.log(req.file)
+                var newName = req.body.title
+                var desc = req.body.desc
+                var img = 'uploads/' + req.file.filename
+                var newBlog = {
+                    title: newName,
+                    image: img,
+                    body: desc
+                }
+                Blog.create(newBlog, (err, newBlog) => {
+                    if (err) {
+                        res.redirect("/blog")
+                    } else {
+                        console.log(newBlog)
+                        res.redirect("/")
+                    }
+                })
+
+            }
+        })
+
+    })
+    //Show route
+app.get("/blog/:id", function(req, res) {
+    Blog.findById(req.params.id, function(err, foundBlog) {
         if (err) {
             console.log(err)
-            res.render("new")
         } else {
-            console.log(req.file)
-            var newName = req.body.title
-            var desc = req.body.desc
-            var img = 'uploads/' + req.file.filename
-            var newBlog = {
-                title: newName,
-                image: img,
-                body: desc
-            }
-            Blog.create(newBlog, (err, newBlog) => {
-                if (err) {
-                    res.redirect("/blog")
-                } else {
-                    console.log(newBlog)
-                    res.redirect("/")
-                }
-            })
-
+            res.render("show", { blog: foundBlog })
         }
     })
 
