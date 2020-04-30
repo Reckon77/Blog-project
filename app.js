@@ -93,17 +93,17 @@ app.get("/blog/:id", function(req, res) {
         })
 
     })
-    //Edit Route
-app.get("/blog/:id/edit", function(req, res) {
-    Blog.findById(req.params.id, function(err, found) {
+    //Delete Route
+app.delete("/blog/:id", function(req, res) {
+    Blog.findByIdAndRemove(req.params.id, function(err) {
         if (err) {
             console.log(err)
         } else {
-            res.render("edit", { blog: found })
+            res.redirect("/")
         }
     })
-
 })
+
 
 app.listen(3000, function() {
     console.log("Server connected")
