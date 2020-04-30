@@ -4,13 +4,15 @@ var express = require("express"),
     mongoose = require("mongoose"),
     bodyParser = require("body-parser"),
     multer = require('multer'),
-    path = require('path')
+    path = require('path'),
+    mo = require("method-override")
 
 //Configuring
 mongoose.set('useUnifiedTopology', true)
 mongoose.connect("mongodb://localhost/kblog", { useNewUrlParser: true })
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static("public"))
+app.use(mo("_method"))
 app.set("view engine", "ejs")
     //Setting up the upload image functionality
     //===================================
@@ -82,11 +84,22 @@ app.post("/blog", (req, res) => {
     })
     //Show route
 app.get("/blog/:id", function(req, res) {
-    Blog.findById(req.params.id, function(err, foundBlog) {
+        Blog.findById(req.params.id, function(err, foundBlog) {
+            if (err) {
+                console.log(err)
+            } else {
+                res.render("show", { blog: foundBlog })
+            }
+        })
+
+    })
+    //Edit Route
+app.get("/blog/:id/edit", function(req, res) {
+    Blog.findById(req.params.id, function(err, found) {
         if (err) {
             console.log(err)
         } else {
-            res.render("show", { blog: foundBlog })
+            res.render("edit", { blog: found })
         }
     })
 
