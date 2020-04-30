@@ -13,22 +13,25 @@
         <div class="row">
             <h1 style="text-align: center;width: 100%;">Create a new blog</h1>
             <div style="width: 30%;margin: 25px auto;">
-                <form action="/campgrounds" method="POST">
+                <form action="/blog" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
-                        <input class="form-control" type="text" placeholder="name" name="name">
+                        <label for="Head">Heading</label>
+                        <input class="form-control" type="text" name="title" id="Head">
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="text" placeholder="image url" name="image">
+                        <label for="exampleFormControlFile1">Image</label>
+                        <input type="file" class="form-control-file" id="exampleFormControlFile1" name="image">
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="text" placeholder="Description" name="desc">
+                        <label>Blog Content</label>
+                        <textarea name="desc" required class="form-control"></textarea>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-lg btn-primary btn-block">Submit</button>
                     </div>
 
                 </form>
-                <a href="/home">Go back</a>
+                <a href="/">Go back</a>
             </div>
 
         </div>
